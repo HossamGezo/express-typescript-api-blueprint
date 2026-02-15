@@ -29,17 +29,18 @@ public/styles/output.css
 
 ---
 
-## 3. Full Dependency Installation (Compatibility Stack) 📦
-
-Run these commands to install the exact versions used in this blueprint to ensure 100% compatibility:
+## 3. Core Dependency Installation (Modern Stack) 📦
+In this stage, we install the latest stable versions of our production dependencies for maximum security and performance, while pinning specific versions for our linting tools to ensure a stable and conflict-free development environment.
 
 ### Step 1: Install Production Dependencies
+These are the core libraries that run your API in the production environment.
 
 ```bash
 npm install bcryptjs compression cors dotenv ejs express express-async-handler express-rate-limit helmet hpp jsonwebtoken mongoose multer nodemailer swagger-jsdoc swagger-ui-express zod
 ```
 
 ### Step 2: Install Development Dependencies (DX)
+These tools are used for building, testing, and ensuring code quality during development.
 
 ```bash
 npm install -D typescript @eslint/js@^9.39.2 @tailwindcss/cli @types/compression @types/connect-livereload @types/cors @types/ejs @types/express @types/hpp @types/jsonwebtoken @types/livereload @types/multer @types/node @types/nodemailer @types/swagger-jsdoc @types/swagger-ui-express concurrently connect-livereload eslint@^9.39.2 husky livereload nodemon prettier tailwindcss tsx typescript-eslint@^8.55.0
