@@ -1,9 +1,15 @@
 # Phase 02: The Entry Point & Middleware Orchestration 🧠
 
+## 🎯 Phase Goal
+
+The objective of this phase is to construct a robust, secure, and high-performance entry point (`src/index.ts`). We focus on the **strategic ordering** of middlewares to ensure the application is production-ready, handling everything from security headers and rate limiting to dynamic environment logic.
+
 ## 📑 Table of Contents
 
 - [Phase 02: The Entry Point \& Middleware Orchestration 🧠](#phase-02-the-entry-point--middleware-orchestration-)
+  - [🎯 Phase Goal](#-phase-goal)
   - [📑 Table of Contents](#-table-of-contents)
+  - [🧐 General Overview: The Final Orchestration](#-general-overview-the-final-orchestration)
   - [1. Dependency Management \& Environment Setup](#1-dependency-management--environment-setup)
   - [2. Layer 02: App Initialization \& Optimized Environment Logic](#2-layer-02-app-initialization--optimized-environment-logic)
     - [📂 Deep Dive: The LiveReload Helper Architecture](#-deep-dive-the-livereload-helper-architecture)
@@ -29,6 +35,123 @@
     - [5.2 Database Logic \& Health Monitoring (`shared/config/db.ts`)](#52-database-logic--health-monitoring-sharedconfigdbts)
     - [🧐 Deep Dive: The Global Schema Transformation Plugin](#-deep-dive-the-global-schema-transformation-plugin)
       - [📋 The Helper Code (`shared/helpers/mongoose.helper.ts`)](#-the-helper-code-sharedhelpersmongoosehelperts)
+
+---
+
+## 🧐 General Overview: The Final Orchestration
+
+This is the complete architecture of our `src/index.ts`. It is organized into 5 logical zones to ensure maximum clarity and maintainability.
+
+```typescript
+/* ============================================================
+   SECTION 1: DEPENDENCY MANAGEMENT & CONFIGURATION
+   ============================================================ */
+import express from "express";
+import { config } from "dotenv";
+import helmet from "helmet";
+import cors from "cors";
+import path from "path";
+import { serve, setup } from "swagger-ui-express";
+import compression from "compression";
+import hpp from "hpp";
+import { rateLimit } from "express-rate-limit";
+
+config();
+
+import connectToDB from "./shared/config/db.js";
+import swaggerSpec from "./shared/config/swagger.js";
+import { setupLiveReload } from "./shared/helpers/livereload.helper.js";
+import logger from "./shared/middlewares/logger.middleware.js";
+import { errorHandler, notFound } from "./shared/middlewares/errors.middleware.js";
+
+import AuthRouter from "./modules/auth/auth.routes.js";
+import PasswordRouter from "./modules/password/password.routes.js";
+import UserRouter from "./modules/user/user.routes.js";
+import AuthorRouter from "./modules/author/author.routes.js";
+import BookRouter from "./modules/book/book.routes.js";
+import UploadRouter from "./modules/upload/upload.routes.js";
+
+/* ============================================================
+   SECTION 2: APP INITIALIZATION & ENVIRONMENT LOGIC
+   ============================================================ */
+const app = express();
+
+app.set("trust proxy", 1);
+setupLiveReload(app);
+
+if (process.env.NODE_ENV === "production") {
+  app.use(compression());
+}
+
+/* ============================================================
+   SECTION 3: SECURITY & REQUEST PARSING
+   ============================================================ */
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(hpp());
+
+if (process.env.NODE_ENV === "development") {
+  app.use(
+    helmet({ contentSecurityPolicy: false, crossOriginEmbedderPolicy: false }),
+  );
+} else {
+  app.use(helmet());
+}
+
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  }),
+);
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 100,
+  message: {
+    message: "Too many requests from this IP, please try again after 15 minutes",
+  },
+});
+
+app.use("/api", limiter);
+app.use("/password", limiter);
+
+/* ============================================================
+   SECTION 4: ASSETS, ROUTING, DOCUMENTATION & ERROR HANDLING
+   ============================================================ */
+app.use(logger);
+app.use(express.static(path.join(process.cwd(), "public")));
+app.set("views", path.join(process.cwd(), "views"));
+app.set("view engine", "ejs");
+
+app.use("/api-docs", serve, setup(swaggerSpec));
+
+app.get("/", (_req, res) => {
+  res.render("home/welcome");
+});
+
+app.use("/api/auth", AuthRouter);
+app.use("/password", PasswordRouter);
+app.use("/api/users", UserRouter);
+app.use("/api/authors", AuthorRouter);
+app.use("/api/books", BookRouter);
+app.use("/api/upload", UploadRouter);
+
+/* ============================================================
+   SECTION 5: SERVER BOOTSTRAP
+   ============================================================ */
+app.use(notFound);
+app.use(errorHandler);
+
+const PORT = process.env.PORT || 8000;
+connectToDB().then(() =>
+  app.listen(PORT, () =>
+    console.log(
+      `Server is running in ${process.env.NODE_ENV || "development"} mode on port ${PORT}`,
+    ),
+  ),
+);
+```
 
 ---
 
@@ -316,6 +439,36 @@ app.use("/password", limiter);
 ## 4. Layer 04: Assets, UI Engine, Documentation, and Error Management 🎨📚
 
 This layer transforms our backend into a full-featured hybrid application (MVC + REST API) and establishes the final safeguards for the system.
+
+```typescript
+// --- Logging Middleware
+app.use(logger);
+
+// --- View Engine & Static Folder Setup
+app.use(express.static(path.join(process.cwd(), "public"))); // Expose the "public" folder to serve static assets
+app.set("views", path.join(process.cwd(), "views")); // Tell Express where the views (EJS templates) live
+app.set("view engine", "ejs");
+
+// --- Swagger UI Route
+app.use("/api-docs", serve, setup(swaggerSpec));
+
+// --- Welcome Page Route
+app.get("/", (_req, res) => {
+  res.render("home/welcome");
+});
+
+// --- API & MVC Routers
+app.use("/api/auth", AuthRouter);
+app.use("/password", PasswordRouter);
+app.use("/api/users", UserRouter);
+app.use("/api/authors", AuthorRouter);
+app.use("/api/books", BookRouter);
+app.use("/api/upload", UploadRouter);
+
+// --- Global Error Handling
+app.use(notFound);
+app.use(errorHandler);
+```
 
 ### 4.1 Request Logging (`shared/middlewares/logger.middleware.ts`)
 
