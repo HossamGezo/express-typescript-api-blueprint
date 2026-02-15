@@ -30,9 +30,11 @@ public/styles/output.css
 ---
 
 ## 3. Core Dependency Installation (Modern Stack) 📦
+
 In this stage, we install the latest stable versions of our production dependencies for maximum security and performance, while pinning specific versions for our linting tools to ensure a stable and conflict-free development environment.
 
 ### Step 1: Install Production Dependencies
+
 These are the core libraries that run your API in the production environment.
 
 ```bash
@@ -40,6 +42,7 @@ npm install bcryptjs compression cors dotenv ejs express express-async-handler e
 ```
 
 ### Step 2: Install Development Dependencies (DX)
+
 These tools are used for building, testing, and ensuring code quality during development.
 
 ```bash
@@ -265,6 +268,7 @@ USER_PASS=
 To set up the full professional foundation instantly, run the following command in your terminal. This will create the entire directory tree and all core configuration files, including folders for assets and CI/CD workflows:
 
 ### 🚀 One-Command Full Setup:
+
 ```bash
 mkdir -p src/shared/{config,helpers,middlewares,types,validations} src/models src/modules src/styles views/home public/images assets .github/workflows && touch src/index.ts src/styles/input.css src/shared/config/{db.ts,swagger.ts} src/shared/helpers/{livereload.helper.ts,mongoose.helper.ts,query.helper.ts,response.helper.ts} src/shared/middlewares/{errors.middleware.ts,logger.middleware.ts,upload.middleware.ts,validateObjectId.middleware.ts,verifyToken.middleware.ts} src/shared/types/express.d.ts src/shared/validations/query.validation.ts views/home/welcome.ejs .env .env.example Dockerfile docker-compose.yml .github/workflows/deploy.yml
 ```
@@ -272,6 +276,7 @@ mkdir -p src/shared/{config,helpers,middlewares,types,validations} src/models sr
 ---
 
 ### 🌳 Complete Initial Structure:
+
 After running the command, your project skeleton will look like this:
 
 ```text
@@ -308,8 +313,9 @@ After running the command, your project skeleton will look like this:
 ---
 
 ### 💡 Why this complete setup?
-*   **Documentation Ready:** The `assets` folder allows you to store diagrams and UI screenshots for your README from day one.
-*   **Automation First:** Including the `.github/workflows` directory ensures that your CI/CD mindset is established before you even write your first route.
-*   **Total Organization:** By creating the `shared` sub-folders immediately, you force yourself to write clean, reusable code instead of cluttering the root.
+
+- **Documentation Ready:** The `assets` folder allows you to store diagrams and UI screenshots for your README from day one.
+- **Automation First:** Including the `.github/workflows` directory ensures that your CI/CD mindset is established before you even write your first route.
+- **Total Organization:** By creating the `shared` sub-folders immediately, you force yourself to write clean, reusable code instead of cluttering the root.
 
 ---
