@@ -1,8 +1,10 @@
 # 🏗️ Express & TypeScript API Blueprint
 
 [![Blueprint Version](https://img.shields.io/badge/Version-2.0.0-blue?style=for-the-badge)](https://github.com/HossamGezo/express-typescript-api-blueprint)
-[![Architecture](https://img.shields.io/badge/Architecture-Modular_Clean-green?style=for-the-badge)](./docs/PHASE-03.md)
-[![DevOps](https://img.shields.io/badge/DevOps-Docker_%26_Actions-2496ED?style=for-the-badge&logo=docker)](./docs/PHASE-04.md)
+[![Phase 01](https://img.shields.io/badge/Phase_01-Setup-orange?style=for-the-badge)](./docs/PHASE-01.md)
+[![Phase 02](https://img.shields.io/badge/Phase_02-Orchestration-red?style=for-the-badge)](./docs/PHASE-02.md)
+[![Phase 03](https://img.shields.io/badge/Phase_03-Modular-green?style=for-the-badge)](./docs/PHASE-03.md)
+[![Phase 04](https://img.shields.io/badge/Phase_04-DevOps-2496ED?style=for-the-badge&logo=docker)](./docs/PHASE-04.md)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](./LICENSE)
 
 ---
@@ -53,13 +55,12 @@ I have divided the project lifecycle into 4 distinct phases, each documented in 
 
 ---
 
-## 👤 Author
+## 👨‍💻 Author
 **Hossam Gezo**
 - GitHub: [@HossamGezo](https://github.com/HossamGezo)
 - LinkedIn: [Your Profile Link]
 
 ---
 *This blueprint is built for those who seek to master Backend Craftsmanship. Every line of code has a "Why" before the "How".*
-```
 
 ---

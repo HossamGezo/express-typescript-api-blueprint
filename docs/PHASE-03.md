@@ -328,13 +328,6 @@ export const validateObjectId = (
   next(); // ID is safe, proceed to the next middleware or controller
 };
 ```
-
-#### 🧐 Why is this S-Tier Logic?
-
-1.  **Database Protection:** Without this middleware, if a user sends a malformed ID (e.g., `/api/books/123`), Mongoose will attempt to query the database and then throw a `CastError`. Our middleware stops this at the entry point.
-2.  **Performance Optimization:** Rejecting an invalid request in the middleware takes microseconds. A database round-trip takes significantly longer. By filtering junk requests early, we save valuable server resources.
-3.  **HTTP Semantics:** It allows us to clearly distinguish between a **400 Bad Request** (Malformed ID) and a **404 Not Found** (Valid ID but record doesn't exist).
-
 ---
 
 ## 4. Global Typing & Validation Strategy 🧬
@@ -343,11 +336,6 @@ export const validateObjectId = (
 shared/types/
 ├── express.d.ts     # [Explained Below] - Global Express Namespace Extension
 └── service.ts       # [Explained Below] - Unified ServiceResult Contract
-```
-
-```text
-shared/validations/
-└── query.validation.ts   # [Explained Below] - Centralized URL Query Validation
 ```
 
 ### 📋 4.1 Global Express Augmentation (`shared/types/express.d.ts`)
@@ -385,6 +373,11 @@ export interface ServiceResult<T = any> {
 ```
 
 ### 📋 4.3 Base Query Validation (`shared/validations/query.validation.ts`)
+
+```text
+shared/validations/
+└── query.validation.ts   # [Explained Below] - Centralized URL Query Validation
+```
 
 Centralizes Zod validation for search and pagination.
 
