@@ -311,11 +311,3 @@ After running the command, your project skeleton will look like this:
 ```
 
 ---
-
-### 💡 Why this complete setup?
-
-- **Documentation Ready:** The `assets` folder allows you to store diagrams and UI screenshots for your README from day one.
-- **Automation First:** Including the `.github/workflows` directory ensures that your CI/CD mindset is established before you even write your first route.
-- **Total Organization:** By creating the `shared` sub-folders immediately, you force yourself to write clean, reusable code instead of cluttering the root.
-
----
